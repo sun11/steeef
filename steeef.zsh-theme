@@ -23,10 +23,10 @@ else
   : ${INDEXED_COLOR=green}
   : ${UNTRACKED_COLOR=red}
 fi
-: ${UNINDEXED_IND=●}
-: ${INDEXED_IND=●}
-: ${UNTRACKED_IND=●}
-VIRTUAL_ENV_DISABLE_PROMPT=1
+: ${UNINDEXED_IND=±}
+: ${INDEXED_IND=±}
+: ${UNTRACKED_IND=±}
+# VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt nopromptbang prompt{cr,percent,sp,subst}
 
@@ -48,7 +48,6 @@ if (( ${+functions[git-info]} )); then
   autoload -Uz add-zsh-hook && add-zsh-hook precmd git-info
 fi
 
-PS1='
-%F{${USER_COLOR}}%n%f at %F{${HOST_COLOR}}%m%f in %F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${VIRTUAL_ENV:+" (%F{blue}${VIRTUAL_ENV:t}%f)"}
+PS1='%F{${USER_COLOR}}%n%f@%F{${HOST_COLOR}}%m%f:%F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${CONDA_DEFAULT_ENV:+" (%F{blue}${CONDA_DEFAULT_ENV:t}%f)"}
 %(!.#.$) '
 unset RPS1
