@@ -11,21 +11,16 @@ if (( terminfo[colors] >= 256 )); then
   : ${HOST_COLOR=166}
   : ${PWD_COLOR=118}
   : ${BRANCH_COLOR=81}
-  : ${UNINDEXED_COLOR=166}
-  : ${INDEXED_COLOR=118}
-  : ${UNTRACKED_COLOR=161}
+  : ${DIRTY_COLOR=166}
+  : ${CLEAN_COLOR=118}
 else
   : ${USER_COLOR=magenta}
   : ${HOST_COLOR=yellow}
   : ${PWD_COLOR=green}
   : ${BRANCH_COLOR=cyan}
-  : ${UNINDEXED_COLOR=yellow}
-  : ${INDEXED_COLOR=green}
-  : ${UNTRACKED_COLOR=red}
 fi
-: ${UNINDEXED_IND=±}
-: ${INDEXED_IND=±}
-: ${UNTRACKED_IND=±}
+: ${CLEAN_COLOR=green}
+: ${DIRTY_COLOR=yellow}
 # VIRTUAL_ENV_DISABLE_PROMPT=1
 
 setopt nopromptbang prompt{cr,percent,sp,subst}
@@ -36,9 +31,13 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:branch' format '%b'
   zstyle ':zim:git-info:commit' format '%c'
   zstyle ':zim:git-info:action' format '(%F{${INDEXED_COLOR}}%s%f)'
-  zstyle ':zim:git-info:unindexed' format '%F{${UNINDEXED_COLOR}}${UNINDEXED_IND}'
-  zstyle ':zim:git-info:indexed' format '%F{${INDEXED_COLOR}}${INDEXED_IND}'
-  zstyle ':zim:git-info:untracked' format '%F{${UNTRACKED_COLOR}}${UNTRACKED_IND}'
+  local git_dirty=${(e)git_info[dirty]}
+  if [[ -n ${git_dirty} ]]; then
+    git_color=${DIRTY_COLOR}
+  else
+    git_color=${CLEAN_COLOR}
+  fi
+  zstyle ':zim:git-info:dirty' format '%F{${git_color}}±'
   if [[ -n ${STASHED_IND} ]]; then
     zstyle ':zim:git-info:stashed' format '%F{${STASHED_COLOR}}${STASHED_IND}'
   fi
