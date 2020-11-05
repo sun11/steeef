@@ -27,26 +27,26 @@ setopt nopromptbang prompt{cr,percent,sp,subst}
 
 typeset -gA git_info
 if (( ${+functions[git-info]} )); then
-  zstyle ':zim:git-info' verbose yes
-  zstyle ':zim:git-info:branch' format '%b'
-  zstyle ':zim:git-info:commit' format '%c'
-  zstyle ':zim:git-info:action' format '(%F{${INDEXED_COLOR}}%s%f)'
+  local git_color
   local git_dirty=${(e)git_info[dirty]}
   if [[ -n ${git_dirty} ]]; then
     git_color=${DIRTY_COLOR}
   else
     git_color=${CLEAN_COLOR}
   fi
-  zstyle ':zim:git-info:dirty' format '%F{${git_color}}±'
-  if [[ -n ${STASHED_IND} ]]; then
-    zstyle ':zim:git-info:stashed' format '%F{${STASHED_COLOR}}${STASHED_IND}'
-  fi
+
+  zstyle ':zim:git-info' verbose no
+  zstyle ':zim:git-info:branch' format '%b'
+  zstyle ':zim:git-info:commit' format '%c'
+  zstyle ':zim:git-info:action' format '(%F{${CLEAN_COLOR}}%s%f)'
+  zstyle ':zim:git-info:unindexed' format '%F{${DIRTY_COLOR}'
+  zstyle ':zim:git-info:indexed' format '%F{${CLEAN_COLOR}}±'
   zstyle ':zim:git-info:keys' format \
-      'prompt' ' (%F{${BRANCH_COLOR}}%b%c%I%i%u%f%S%f)%s'
+      'prompt' ' (%F{${BRANCH_COLOR}}%b%c%f%I%i%f)%s%f'
 
   autoload -Uz add-zsh-hook && add-zsh-hook precmd git-info
 fi
 
-PS1='%F{${USER_COLOR}}%n%f@%F{${HOST_COLOR}}%m%f:%F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${CONDA_DEFAULT_ENV:+" (%F{blue}${CONDA_DEFAULT_ENV:t}%f)"}
+PS1='%F{${USER_COLOR}}%n%f at %F{${HOST_COLOR}}%m%f in %F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${CONDA_DEFAULT_ENV:+" (%F{blue}${CONDA_DEFAULT_ENV:t}%f)"}
 %(!.#.$) '
 unset RPS1
