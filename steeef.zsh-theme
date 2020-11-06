@@ -39,7 +39,7 @@ if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:branch' format '%b'
   zstyle ':zim:git-info:commit' format '%c'
   zstyle ':zim:git-info:action' format '(%F{${CLEAN_COLOR}}%s%f)'
-  zstyle ':zim:git-info:unindexed' format '%F{${DIRTY_COLOR}'
+  zstyle ':zim:git-info:unindexed' format '%F{${DIRTY_COLOR}}'
   zstyle ':zim:git-info:indexed' format '%F{${CLEAN_COLOR}}±'
   zstyle ':zim:git-info:keys' format \
       'prompt' ' (%F{${BRANCH_COLOR}}%b%c%f%I%i%f)%s%f'
@@ -47,6 +47,6 @@ if (( ${+functions[git-info]} )); then
   autoload -Uz add-zsh-hook && add-zsh-hook precmd git-info
 fi
 
-PS1='%F{${USER_COLOR}}%n%f at %F{${HOST_COLOR}}%m%f in %F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${CONDA_DEFAULT_ENV:+" (%F{blue}${CONDA_DEFAULT_ENV:t}%f)"}
+PS1='%F{${USER_COLOR}}%n%f@%F{${HOST_COLOR}}%m%f:%F{${PWD_COLOR}}%~%f${(e)git_info[prompt]}${CONDA_DEFAULT_ENV:+" (%F{blue}${CONDA_DEFAULT_ENV:t}%f)"}
 %(!.#.$) '
 unset RPS1
